@@ -4,6 +4,13 @@ import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import Marketplace from '../Marketplace.json';
 import { useLocation } from "react-router";
 
+export default function SellNFT () {
+    const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
+    const [fileURL, setFileURL] = useState(null);
+    const ethers = require("ethers");
+    const [message, updateMessage] = useState('');
+    const location = useLocation();
+
     //This function uploads the NFT image to IPFS
     async function OnChangeFile(e) {
         var file = e.target.files[0];
@@ -21,7 +28,7 @@ import { useLocation } from "react-router";
         }
     }
 
-    //This function uploads the metadata to IPDS
+    //This function uploads the metadata to IPFS
     async function uploadMetadataToIPFS() {
         const {name, description, price} = formParams;
         //Make sure that none of the fields are empty
@@ -78,13 +85,7 @@ import { useLocation } from "react-router";
         }
     }
 
-export default function SellNFT () {
-    const [formParams, updateFormParams] = useState({ name: '', description: '', price: ''});
-    const [fileURL, setFileURL] = useState(null);
-    const ethers = require("ethers");
-    const [message, updateMessage] = useState('');
-    const location = useLocation();
-
+    console.log("Working", process.env);
     return (
         <div className="">
         <Navbar></Navbar>
@@ -105,11 +106,11 @@ export default function SellNFT () {
                 </div>
                 <div>
                     <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Image</label>
-                    <input type={"file"} onChange={""}></input>
+                    <input type={"file"} onChange={OnChangeFile}></input>
                 </div>
                 <br></br>
                 <div className="text-green text-center">{message}</div>
-                <button onClick={""} className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg">
+                <button onClick={listNFT} className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg">
                     List NFT
                 </button>
             </form>
