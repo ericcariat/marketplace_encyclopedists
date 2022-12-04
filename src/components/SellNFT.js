@@ -105,8 +105,13 @@ export default function SellNFT () {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" placeholder="Min 0.01 ETH" step="0.01" value={formParams.price} onChange={e => updateFormParams({...formParams, price: e.target.value})}></input>
                 </div>
                 <div>
-                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Image</label>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload Cover Image</label>
                     <input type={"file"} onChange={OnChangeFile}></input>
+                </div>
+                <br></br>
+                <div>
+                    <label className="block text-purple-500 text-sm font-bold mb-2" htmlFor="image">Upload e-book</label>
+                    <input type={"file"} name="text"></input>
                 </div>
                 <br></br>
                 <div className="text-green text-center">{message}</div>

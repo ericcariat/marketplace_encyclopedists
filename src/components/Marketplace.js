@@ -3,6 +3,7 @@ import NFTTile from "./NFTTile";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
+import bandeau from '../bandeau.png';
 
 export default function Marketplace() {
 const sampleData = [
@@ -47,12 +48,17 @@ async function getAllNFTs() {
 if(!dataFetched)
     getAllNFTs();
 
+
 return (
     <div>
         <Navbar></Navbar>
-        <div className="flex flex-col place-items-center mt-20">
+        
+            <img src={bandeau} alt="" width={1000} className="center-bandeau"/>
+        
+        <div className="flex flex-col place-items-center mt-20 ml-240">
+            
             <div className="md:text-xl font-bold text-white">
-                Top NFTs
+                Our e-book collection 
             </div>
             <div className="flex mt-5 justify-between flex-wrap max-w-screen-xl text-center">
                 {data.map((value, index) => {
