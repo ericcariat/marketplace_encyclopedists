@@ -34,6 +34,8 @@ function updateButton() {
   ethereumButton.classList.add("bg-green-500");
 }
 
+// <img src={fullLogo} alt="" width={120} height={120} className="inline-block -mt-2"/>
+
 async function connectWebsite() {
 
     const chainId = await window.ethereum.request({ method: 'eth_chainId' });
@@ -71,13 +73,42 @@ async function connectWebsite() {
 
     return (
       <div className="">
+        <div className="sidemenu">
+          <section id="sideMenu">
+            <nav>
+              <a href="#" class="active"><i class="fa fa-home" aria-hidden="true"></i>Home</a>
+              <a href="/"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>Marketplace</a>
+              <a href="/sellNFT"><i class="fa fa-bookmark-o" aria-hidden="true"></i>Publish</a>
+              <a href="#"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> DAO</a>
+              <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Library</a>
+              <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> Buy ECL Token</a>
+              <a href="/profile"><i class="fa fa-cog" aria-hidden="true"></i> My profile</a>
+            </nav>
+          </section>
+
+          <header>
+            <div class="search-area">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              <input type="text"></input>
+            </div>
+            <div class="user-area">
+              <a href="#">+ Add</a>
+              <a href="#" class="notification"><i class="fa fa-bell-o" aria-hidden="true"></i>
+          <span class="circle">3</span></a>
+              <a href="#">
+                <div class="user-img"></div>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </a>
+            </div>
+          </header>
+        </div>
         <nav className="w-screen">
           <ul className='flex items-end justify-between py-3 bg-transparent text-white pr-5'>
           <li className='flex items-end ml-5 pb-2'>
             <Link to="/">
-            <img src={fullLogo} alt="" width={120} height={120} className="inline-block -mt-2"/>
+            
             <div className='inline-block font-bold text-xl ml-2'>
-              NFT Marketplace
+              The Encyclopedists
             </div>
             </Link>
           </li>
@@ -94,20 +125,20 @@ async function connectWebsite() {
               }
               {location.pathname === "/sellNFT" ? 
               <li className='border-b-2 hover:pb-0 p-2'>
-                <Link to="/sellNFT">List My NFT</Link>
+                <Link to="/sellNFT">Publish</Link>
               </li>
               :
               <li className='hover:border-b-2 hover:pb-0 p-2'>
-                <Link to="/sellNFT">List My NFT</Link>
+                <Link to="/sellNFT">Publish</Link>
               </li>              
               }              
               {location.pathname === "/profile" ? 
               <li className='border-b-2 hover:pb-0 p-2'>
-                <Link to="/profile">Profile</Link>
+                <Link to="/profile">My profile</Link>
               </li>
               :
               <li className='hover:border-b-2 hover:pb-0 p-2'>
-                <Link to="/profile">Profile</Link>
+                <Link to="/profile">My profile</Link>
               </li>              
               }  
               <li>
