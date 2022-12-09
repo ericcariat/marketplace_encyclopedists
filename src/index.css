@@ -1,30 +1,112 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 
 body {
   margin: 0;
   /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;*/
-  font-family: 'Open Sans',sans-serif;
+  font-family: 'Open Sans',sans-serif,"Roboto" ;
   /*font-family: 'M PLUS 1p', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('./bg.png');
-  background-size: 200% 180%;
-  animation-duration: 3s;
-  animation-timing-function: linear;
-  animation-delay: 0s;
-  animation-iteration-count: infinite;
-  animation-direction: normal;
-  animation-fill-mode: none;
-  animation-play-state: running;
-  animation-name: gradientTransform;
-  background-repeat: no-repeat;
+  background-color: #2d334e;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+#sideMenu {
+  background: #101738;
+  width: 240px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transition: 1s;
+}
+
+nav a {
+  display: block;
+  padding: 5px;
+  border-left: 5px solid transparent;
+  color: #e7eaf4;
+  transition: all 1s;
+}
+nav a.active {
+  color: #5e60ee;
+}
+nav a:hover {
+  background: #918ef5;
+  text-decoration: none;
+  color: #e7eaf4;
+}
+nav a .fa {
+  color: #918ef5;
+  width: 30px;
+}
+
+header {
+  background: #101738;
+  padding: 10px;
+  margin-left: 240px;
+}
+header .search-area {
+  background: #918ef5;
+  display: inline-block;
+}
+header .search-area .fa {
+  color: #e7eaf4;
+}
+header .search-area input[type=text] {
+  background: transparent;
+  border: none;
+  color: #918ef5;
+  padding: 8px 10px;
+}
+header .search-area input[type=text]:hover {
+  background: #f2f5fa;
+}
+header .user-area {
+  display: inline-block;
+  float: right;
+  padding: 8px;
+}
+header .user-area a {
+  display: inline-block;
+  padding-right: 20px;
+  color: #aaa;
+}
+header .user-area a:hover {
+  text-decoration: none;
+}
+header .user-area a.notification {
+  position: relative;
+}
+header .user-area a.notification .circle {
+  background: #918ef5;
+  color: #f2f5fa;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 50%;
+  font-size: 9px;
+  text-align: center;
+  position: absolute;
+  top: -5px;
+  left: 5px;
+}
+
+.center-bandeau {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
