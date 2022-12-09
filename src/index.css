@@ -26,7 +26,7 @@ code {
 }
 
 #sideMenu {
-  background: #2c293f;
+  background: #101738;
   width: 240px;
   position: absolute;
   top: 0;
@@ -36,32 +36,31 @@ code {
 
 nav a {
   display: block;
-  padding: 15px;
+  padding: 5px;
   border-left: 5px solid transparent;
   color: #e7eaf4;
   transition: all 1s;
 }
 nav a.active {
-  background: #252234;
-  border-left: 5px solid #6eb81b;
+  color: #5e60ee;
 }
 nav a:hover {
-  background: #252234;
-  border-left: 5px solid #6eb81b;
+  background: #918ef5;
   text-decoration: none;
   color: #e7eaf4;
 }
 nav a .fa {
-  color: #6eb81b;
+  color: #918ef5;
   width: 30px;
 }
 
 header {
-  background: #fff;
+  background: #101738;
   padding: 10px;
   margin-left: 240px;
 }
 header .search-area {
+  background: #918ef5;
   display: inline-block;
 }
 header .search-area .fa {
@@ -70,7 +69,7 @@ header .search-area .fa {
 header .search-area input[type=text] {
   background: transparent;
   border: none;
-  color: #6eb81b;
+  color: #918ef5;
   padding: 8px 10px;
 }
 header .search-area input[type=text]:hover {
@@ -93,7 +92,7 @@ header .user-area a.notification {
   position: relative;
 }
 header .user-area a.notification .circle {
-  background: #6eb81b;
+  background: #918ef5;
   color: #f2f5fa;
   width: 12px;
   height: 12px;
@@ -104,4 +103,10 @@ header .user-area a.notification .circle {
   position: absolute;
   top: -5px;
   left: 5px;
+}
+
+.center-bandeau {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
