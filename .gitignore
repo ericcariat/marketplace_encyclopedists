@@ -27,3 +27,8 @@ coverage
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+node_modules
+artifacts
+cache
+firebase.json
+package-lock.json
