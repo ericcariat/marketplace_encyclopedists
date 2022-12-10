@@ -109,6 +109,7 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     // @dev Could only be called by the Owner
     // @return the actual balance 
     function withdraw() public payable onlyOwner {
+        require(address(this).balance > 0, "no balance to retrieve");
         // no reentrency issue here
         (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(success);
@@ -136,4 +137,6 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         return false;
     }
 
+    //  @dev To receive ETH
+    // receive() external payable {}
 }

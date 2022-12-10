@@ -1,20 +1,24 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "./eBookFactory.sol";
+import "./eBookNFT.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract NFTMarketplace is ERC721URIStorage {
+contract NFTMarketplace is ERC721URIStorage, eBookFactory {
 
     using Counters for Counters.Counter;
     //_tokenIds variable has the most recent minted tokenId
     Counters.Counter private _tokenIds;
     //Keeps track of the number of items sold on the marketplace
     Counters.Counter private _itemsSold;
-    //owner is the contract address that created the smart contract
-    address payable owner;
+
+    // NFT instance 
+    eBookNFT ebook_nft_instance;
+
     //The fee charged by the marketplace to be allowed to list an NFT
     uint256 listPrice = 0.01 ether;
 
@@ -40,11 +44,11 @@ contract NFTMarketplace is ERC721URIStorage {
     mapping(uint256 => ListedToken) private idToListedToken;
 
     constructor() ERC721("NFTMarketplace", "NFTM") {
-        owner = payable(msg.sender);
+       // owner = payable(msg.sender);
     }
 
     function updateListPrice(uint256 _listPrice) public payable {
-        require(owner == msg.sender, "Only owner can update listing price");
+        // require(owner == msg.sender, "Only owner can update listing price");
         listPrice = _listPrice;
     }
 
@@ -64,6 +68,32 @@ contract NFTMarketplace is ERC721URIStorage {
     function getCurrentToken() public view returns (uint256) {
         return _tokenIds.current();
     }
+
+    // The Author publish is eBook collection  
+    function createCollection_eBook(string memory eBookTitle, string memory tokenURI, uint256 price) public payable returns (uint) {
+
+        address collectionAddress;
+    
+        // call the Factory to create the collection and retrieve address
+        collectionAddress = createNFTCollection(eBookTitle);
+
+        ebook_nft_instance = eBookNFT(collectionAddress);
+
+        //Mint the NFT with tokenId newTokenId to the address who called createToken
+        ebook_nft_instance.mint_publish_eBook (tokenURI);    
+        
+        // ebook_nft_instance.setMaxSupply(100);
+
+        // we have to transfert ownership to the Author 
+        // ebook_nft_instance._transfer(address(this), msg.sender, tokenId);
+        // approve the marketplace to sell NFTs on your behalf
+        // ebook_nft_instance.approve(address(this), tokenId);
+        //Helper function to update Global variables and emit an event
+        // createListedToken(newTokenId, price);
+
+        return 0;
+    }
+
 
     //The first time a token is created, it is listed here
     function createToken(string memory tokenURI, uint256 price) public payable returns (uint) {
@@ -171,9 +201,9 @@ contract NFTMarketplace is ERC721URIStorage {
         approve(address(this), tokenId);
 
         //Transfer the listing fee to the marketplace creator
-        payable(owner).transfer(listPrice);
+        // payable(owner).transfer(listPrice);
         //Transfer the proceeds from the sale to the seller of the NFT
-        payable(seller).transfer(msg.value);
+        // payable(seller).transfer(msg.value);
     }
 
     //We might add a resell token function in the future
