@@ -40,6 +40,23 @@ async function main() {
   //This writes the ABI and address to the mktplace.json
   fs.writeFileSync('./src/eBookNFT.json', JSON.stringify(dataEbook))  
 
+  console.log("Deploying factory");
+
+  const eBookFactoryContract = await hre.ethers.getContractFactory("eBookFactory");
+  const eBookFactoryInstance = await eBookFactoryContract.deploy();
+
+  await eBookFactoryInstance.deployed();
+
+  console.log("eBookFactoray Contract address:", eBookFactoryInstance.address);
+
+  const dataFactory = {
+    address: eBookFactoryInstance.address,
+    abi: JSON.parse(eBookFactoryInstance.interface.format('json'))
+  }
+
+  //This writes the ABI and address to the json
+  fs.writeFileSync('./src/eBookFactory.json', JSON.stringify(dataFactory))
+
 }
 
 main()
