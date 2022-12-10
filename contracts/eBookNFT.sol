@@ -13,13 +13,16 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIds;
 
     //set the price to mint each NFT
-    uint256 private price = 0.01 ether;
+    uint256 private price = 0 ether;
 
     //set the max supply of NFT's
     uint256 private maxSupply = 100;
 
-    // actual balance on this contract 
-    uint private balance;
+    // ceate a mapping to keep how many tokens each address has
+    mapping(address => uint256) private ownedTokens;
+
+    // keep the owner address for each tokenId
+    mapping(uint256 => address) private tokenOwner;
 
     /* The structure to store info about our ebook */
     struct Characteristics {
@@ -35,28 +38,25 @@ contract eBookNFT is ERC721URIStorage, Ownable {
 
     constructor() ERC721("ENCYCLOPEDISTS_NFT","NFT") {}
 
-    /// @notice Mint a new ebook 
-    /// @dev public function 
-    /// @param _userAddress user address
-    /// @param _tokenURI metadata link 
-    /// @param _isPromotor set to true if this is a promotor reader
-    /// @return newTokenID the new token ID
-    function MintEbook (address _userAddress, string calldata _tokenURI, bool _isPromotor) public payable returns(uint)
+    // @notice Mint a new ebook 
+    // @dev public function 
+    // @param _userAddress user address
+    // @param _tokenURI metadata link 
+    // @param _isPromotor set to true if this is a promotor reader
+    // @return newTokenID the new token ID
+    // function mint_publish_eBook (string calldata _tokenURI, uint256 _newPrice, address _userAddress, bool _isPromotor) public payable onlyOwner returns(uint)
+    function mint_publish_eBook (string calldata _tokenURI, uint256 _newPrice, address _userAddress) public payable onlyOwner returns(uint)
     {
         require(ebookNFTTable.length < (maxSupply - 1), "All NFT has been sold");
         require(msg.value >= price, "Please send more money");
-        if (_tokenIds.current() == 0 ) {
-            // First NFT can only be minted by the owner ... that's the rule ;-)
-            _checkOwner();
-        }
 
         // we start at 1
         _tokenIds.increment(); 
 
         uint newTokenID = _tokenIds.current();
 
-        // store in array 
-        ebookNFTTable.push(Characteristics(_isPromotor));
+        // store in array - keep if it is a promotor (for royalties later)
+        // ebookNFTTable.push(Characteristics(_isPromotor));
 
         // let's mint it 
         _mint(_userAddress, newTokenID);
@@ -64,8 +64,9 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         // set link to metadata
         _setTokenURI(newTokenID, _tokenURI);
 
-        // increase balance   TODO check security here ! 
-        balance += msg.value;
+        // update our mapping 
+        ownedTokens[_userAddress] +=1;
+        tokenOwner[newTokenID] = _userAddress;
 
         // emit event 
         emit evtMinted(newTokenID);
@@ -85,11 +86,17 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         emit evtNewPrice(_newPrice);
     }
 
+    // @notice get the list price 
+    // @return the listed price 
+    function getListPrice() public view returns (uint256) {
+        return price;
+    }
+
     // @notice set the number of available NFT in this collection 
     // @dev Could only be called by the Owner
     // @param _maxSupply number of NFT that can be minted
     function setMaxSupply(uint256 _maxSupply) public onlyOwner {
-        require(ebookNFTTable.length < _maxSupply, "max supply should higher than the number of minted NFT" );
+        require(_tokenIds.current() < _maxSupply, "max supply should higher than the number of minted NFT" );
         require(_maxSupply != 0, "Max supply could not be zero" );
         
         maxSupply = _maxSupply;
@@ -108,11 +115,26 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     }
 
     // @notice Check actual balance on this contract  
-    // @dev Could only be called by the Owner
     // @return the actual balance 
-    function getBalance() public view returns(uint256) {
-        uint256 retAddress = balance;
-        return retAddress;
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
+    // @notice get the remaining number of minting
+    // @return number of NFT we can still mint in this contract 
+    function getRemainingMinting() public view returns(uint) {
+        require(maxSupply >= _tokenIds.current(), "we got a problem : tokenID > maxSupply");
+        return (maxSupply - _tokenIds.current());
+    }
+
+    // @notice Check if an address is an Ebook owner 
+    // @return true if the address has an eBook NFT 
+    function iseBookNFTOwner( address _userAddress) public view returns(bool) {
+        if (ownedTokens[_userAddress] > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
