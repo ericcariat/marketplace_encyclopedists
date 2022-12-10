@@ -87,39 +87,6 @@ export default function SellNFT () {
         }
     }
 
-    async function listNFT(e) {
-        e.preventDefault();
-
-        //Upload data to IPFS
-        try {
-            const metadataURL = await uploadMetadataToIPFS();
-            //After adding your Hardhat network to your metamask, this code will get providers and signers
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            updateMessage("Please wait.. uploading (upto 5 mins)")
-
-            //Pull the deployed contract instance
-            let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
-
-            //massage the params to be sent to the create NFT request
-            const price = ethers.utils.parseUnits(formParams.price, 'ether')
-            let listingPrice = await contract.getListPrice()
-            listingPrice = listingPrice.toString()
-
-            //actually create the NFT
-            let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
-            await transaction.wait()
-
-            alert("Successfully listed your NFT!");
-            updateMessage("");
-            updateFormParams({ name: '', description: '', price: ''});
-            window.location.replace("/")
-        }
-        catch(e) {
-            alert( "Upload error"+e )
-        }
-    }
-
     console.log("Working", process.env);
     return (
         <div className="">
