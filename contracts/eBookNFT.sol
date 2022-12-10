@@ -45,7 +45,7 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     // @param _isPromotor set to true if this is a promotor reader
     // @return newTokenID the new token ID
     // function mint_publish_eBook (string calldata _tokenURI, uint256 _newPrice, address _userAddress, bool _isPromotor) public payable onlyOwner returns(uint)
-    function mint_publish_eBook (string calldata _tokenURI, uint256 _newPrice) public payable onlyOwner returns(uint)
+    function mint_publish_eBook (string calldata _tokenURI) public payable onlyOwner returns(uint)
     {
         require(ebookNFTTable.length < (maxSupply - 1), "All NFT has been sold");
         require(msg.value >= price, "Please send more money");
@@ -132,9 +132,8 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     function iseBookNFTOwner( address _userAddress) public view returns(bool) {
         if (ownedTokens[_userAddress] > 0) {
             return true;
-        } else {
-            return false;
-        }
+        } 
+        return false;
     }
 
 }
