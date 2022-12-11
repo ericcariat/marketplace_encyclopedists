@@ -2,6 +2,8 @@ import Navbar from "./Navbar";
 import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import Marketplace from '../Marketplace.json';
+import eBookNFT from '../eBookNFT.json';
+import eBookFactory from '../eBookFactory.json';
 import { useLocation } from "react-router";
 
 export default function SellNFT () {
@@ -52,32 +54,32 @@ export default function SellNFT () {
         }
     }
 
-    async function listNFT(e) {
+    async function publishNFTeBook(e) {
         e.preventDefault();
 
         //Upload data to IPFS
         try {
             const metadataURL = await uploadMetadataToIPFS();
+
             //After adding your Hardhat network to your metamask, this code will get providers and signers
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
-            updateMessage("Please wait.. uploading (upto 5 mins)")
 
-            //Pull the deployed contract instance
+            updateMessage("Please wait.. publishing (upto 5 mins)")
+
+            // Call the MaketPlace factory to deploy a new collection 
             let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
-
-            //massage the params to be sent to the create NFT request
+            
+            // get Author price 
             const price = ethers.utils.parseUnits(formParams.price, 'ether')
-            let listingPrice = await contract.getListPrice()
-            listingPrice = listingPrice.toString()
-
+            
             //actually create the NFT
-            let transaction = await contract.createToken(metadataURL, price, { value: listingPrice })
+            let transaction = await contract.createCollection_eBook(formParams.name, metadataURL, price);
             await transaction.wait()
 
             alert("Successfully listed your NFT!");
             updateMessage("");
-            updateFormParams({ name: '', description: '', price: ''});
+            updateFormParams({ name: '', description: ''});
             window.location.replace("/")
         }
         catch(e) {
@@ -115,7 +117,7 @@ export default function SellNFT () {
                 </div>
                 <br></br>
                 <div className="text-green text-center">{message}</div>
-                <button onClick={listNFT} className="font-bold mt-10 w-full bg-[#918ef5] text-white rounded p-2 shadow-lg">
+                <button onClick={publishNFTeBook} className="font-bold mt-10 w-full bg-[#918ef5] text-white rounded p-2 shadow-lg">
                     Publish your book
                 </button>
             </form>

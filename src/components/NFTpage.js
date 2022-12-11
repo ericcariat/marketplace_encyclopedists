@@ -13,6 +13,7 @@ const [message, updateMessage] = useState("");
 const [currAddress, updateCurrAddress] = useState("0x");
 
 async function getNFTData(tokenId) {
+    console.log("getNFTData");
     const ethers = require("ethers");
     //After adding your Hardhat network to your metamask, this code will get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -20,10 +21,11 @@ async function getNFTData(tokenId) {
     const addr = await signer.getAddress();
     //Pull the deployed contract instance
     let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer)
-    //create an NFT Token
-    const tokenURI = await contract.tokenURI(tokenId);
+    //get NFT information
     const listedToken = await contract.getListedTokenForId(tokenId);
-    let meta = await axios.get(tokenURI);
+    console.log("listedToken");
+    console.log(listedToken.remainingMint);
+    let meta = await axios.get(listedToken.tokenURI);
     meta = meta.data;
     console.log(listedToken);
 
@@ -32,6 +34,7 @@ async function getNFTData(tokenId) {
         tokenId: tokenId,
         seller: listedToken.seller,
         owner: listedToken.owner,
+        remaining: listedToken.remainingMint.toNumber(),
         image: meta.image,
         name: meta.name,
         description: meta.description,
@@ -91,6 +94,9 @@ async function buyNFT(tokenId) {
                     </div>
                     <div>
                         Seller: <span className="text-sm">{data.seller}</span>
+                    </div>
+                    <div>
+                        Remaining: <span className="text-sm">{data.remaining}</span>
                     </div>
                     <div>
                     { currAddress == data.owner || currAddress == data.seller ?
