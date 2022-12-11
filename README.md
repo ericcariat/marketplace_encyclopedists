@@ -50,6 +50,11 @@ First run ganache (with mnemonics from your test wallet)
 ganache
 ```
 
+## Deploy on testnet Goerli 
+```
+npx hardhat run --network goerli scripts/deploy.js
+```
+
 ## Result
 
 Here is a screnshot of the application 
