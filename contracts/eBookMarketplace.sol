@@ -89,7 +89,7 @@ contract eBookMarketplace is eBookFactory {
         // ebook_nft_instance.transferFrom(address(this), msg.sender, newTokenId);
 
         // approve the marketplace to sell NFTs on your behalf
-        ebook_nft_instance.approve(address(this), newTokenId);
+        // ebook_nft_instance.approve(address(this), newTokenId);
         
         uint remainingBook = ebook_nft_instance.getRemainingMinting();
 
@@ -216,4 +216,15 @@ contract eBookMarketplace is eBookFactory {
         //Transfer the proceeds from the sale to the seller of the NFT
         payable(seller).transfer(msg.value);
     }
+
+    // @notice Check actual balance on this contract  
+    // @dev Could only be called by the Owner
+    // @return the actual balance 
+    function withdraw() public payable onlyOwner {
+        require(address(this).balance > 0, "no balance to retrieve");
+        // no reentrency issue here
+        (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
+        require(success);
+    }
+
 }

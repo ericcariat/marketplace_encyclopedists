@@ -35,6 +35,9 @@ contract eBookFactory is Ownable {
         // Save the contracts address for this Author 
         eBookCollections[msg.sender].push(collectionAddress);
 
+        // the contract has this factory address as ownership ... it switch back to the caller 
+        eBookNFT(collectionAddress).transferOwnership(msg.sender);
+
         emit evtBookCollectionCreated(_TitleName, collectionAddress, block.timestamp);
 
         return collectionAddress;
