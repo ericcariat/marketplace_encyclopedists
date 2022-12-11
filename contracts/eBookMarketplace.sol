@@ -212,13 +212,13 @@ contract eBookMarketplace is Ownable, eBookFactory {
         ebook_nft_instance.transferFrom(ownerNFT, msg.sender, tokenId);
 
         //approve the marketplace to sell NFTs on your behalf
-        ebook_nft_instance.approve(address(this), tokenId);
+        // ebook_nft_instance.approve(address(this), tokenId);
 
         //Transfer the listing fee to the marketplace creator
         //payable(owner).transfer(listPrice);
 
         //Transfer the proceeds from the sale to the seller of the NFT
-        payable(seller).transfer(msg.value);
+        // payable(seller).transfer(msg.value);
     }
 
     // @notice Check actual balance on this contract  
