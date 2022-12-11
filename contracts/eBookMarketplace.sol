@@ -7,8 +7,9 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract eBookMarketplace is eBookFactory {
+contract eBookMarketplace is Ownable, eBookFactory {
 
     using Counters for Counters.Counter;
     //_tokenIds variable has the most recent minted tokenId
@@ -43,6 +44,9 @@ contract eBookMarketplace is eBookFactory {
         address seller,
         uint256 price
     );
+
+    // event in case of receive or fallback 
+    event evtReceiveOrFallback(address userAddress);
 
     //This mapping maps collectionId to token info and is helpful when retrieving details about a tokenId
     mapping(uint256 => ListedCollection) private idToListedCollection;
@@ -225,6 +229,16 @@ contract eBookMarketplace is eBookFactory {
         // no reentrency issue here
         (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(success);
+    }
+
+    // @notice needed to receive money 
+    receive() external payable {
+        emit evtReceiveOrFallback(msg.sender);
+    }
+
+    // @notice fallback 
+    fallback() external payable {
+        emit evtReceiveOrFallback(msg.sender);
     }
 
 }
