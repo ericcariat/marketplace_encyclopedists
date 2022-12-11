@@ -19,7 +19,8 @@ module.exports = {
     },
     goerli: {
       url: process.env.REACT_APP_ALCHEMY_API_URL,
-      accounts: [ process.env.REACT_APP_PRIVATE_KEY ]
+      accounts: [ process.env.REACT_PRIVAT_2 ],
+      saveDeployments: true,
     }
   },
   solidity: {
@@ -27,7 +28,7 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200
+        runs: 1000
       }
     }
   }

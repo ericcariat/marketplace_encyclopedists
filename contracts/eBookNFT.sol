@@ -137,10 +137,6 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         return false;
     }
 
-    function getContractVersion() public view returns (uint) {
-        return 1;
-    }
-
     //  @dev To receive ETH
     // receive() external payable {}
 }

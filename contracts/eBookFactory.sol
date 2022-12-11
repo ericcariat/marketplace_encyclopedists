@@ -47,8 +47,4 @@ contract eBookFactory is Ownable {
         return eBookCollections[addr];
     }
 
-    function getContractVersion() public view returns (uint) {
-        return 1;
-    }
-
 }
