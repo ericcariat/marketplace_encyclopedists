@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract eBookMarketplace is ERC721URIStorage, eBookFactory {
+contract eBookMarketplace is eBookFactory {
 
     using Counters for Counters.Counter;
     //_tokenIds variable has the most recent minted tokenId
@@ -47,8 +47,8 @@ contract eBookMarketplace is ERC721URIStorage, eBookFactory {
     //This mapping maps collectionId to token info and is helpful when retrieving details about a tokenId
     mapping(uint256 => ListedCollection) private idToListedCollection;
 
-    constructor() ERC721("NFTMarketplace", "NFTM") {
-       // owner = payable(msg.sender);
+    constructor()  {
+       
     }
 
     function getListedTokenForId(uint256 tokenId) public view returns (ListedCollection memory) {
@@ -86,7 +86,7 @@ contract eBookMarketplace is ERC721URIStorage, eBookFactory {
         ebook_nft_instance.setPrice(price);
 
         // we have to transfert ownership to the Author 
-        ebook_nft_instance.transferFrom(address(this), msg.sender, newTokenId);
+        // ebook_nft_instance.transferFrom(address(this), msg.sender, newTokenId);
 
         // approve the marketplace to sell NFTs on your behalf
         ebook_nft_instance.approve(address(this), newTokenId);
@@ -183,13 +183,10 @@ contract eBookMarketplace is ERC721URIStorage, eBookFactory {
         return items;
     }
 
+    // Execute a sale ...
+    // @param tokenItem  the item in the marketplace we are selling 
     function executeSale(uint256 tokenItem) public payable {
-
-        ////////
-        address collectionAddress;
-        uint itemCount;
-    
-        // retriev contract address 
+        // retrieve contract address 
         address contractNFT = idToListedCollection[tokenItem].contract_eBookNFTAddress;
         uint price = idToListedCollection[tokenItem].price;
         address seller = idToListedCollection[tokenItem].seller;
@@ -219,5 +216,4 @@ contract eBookMarketplace is ERC721URIStorage, eBookFactory {
         //Transfer the proceeds from the sale to the seller of the NFT
         payable(seller).transfer(msg.value);
     }
-
 }
