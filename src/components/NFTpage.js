@@ -38,6 +38,7 @@ async function getNFTData(tokenId) {
         image: meta.image,
         name: meta.name,
         description: meta.description,
+        ebookLocation: meta.ebookLocation,
     }
     console.log(item);
     updateData(item);
@@ -105,7 +106,12 @@ async function buyNFT(tokenId) {
                     }                   
                     <div className="text-green text-center mt-3">{message}</div>
                     </div>
-                </div>
+                </div>                   
+                    { currAddress == data.owner || currAddress == data.seller ?
+                        <div className="text-xl ml-20 space-y-8 text-white shadow-2xl rounded-lg border-2 p-5">
+                        <embed src={ data.ebookLocation +"?filename=test.pdf"} width="500" height="600" type="application/pdf"></embed></div>
+                    : <div></div>
+                    }                
             </div>
         </div>
     )

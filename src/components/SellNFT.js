@@ -12,8 +12,9 @@ export default function SellNFT () {
     const ethers = require("ethers");
     const [message, updateMessage] = useState('');
     const location = useLocation();
+    const [fileURLeBook, setFile_eBookURL] = useState(null);
 
-    //This function uploads the NFT image to IPFS
+    // This function uploads the NFT image(cover) to IPFS
     async function OnChangeFile(e) {
         var file = e.target.files[0];
         //check for file extension
@@ -30,15 +31,32 @@ export default function SellNFT () {
         }
     }
 
+    // This function uploads the eBook pdf to IPFS
+    async function OnChangeFile_EBook(e) {
+        var file = e.target.files[0];
+        //check for file extension
+        try {
+            //upload the file to IPFS
+            const response = await uploadFileToIPFS(file);
+            if(response.success === true) {
+                console.log("Uploaded ebook to Pinata: ", response.pinataURL)
+                setFile_eBookURL(response.pinataURL);
+            }
+        }
+        catch(e) {
+            console.log("Error during ebook upload", e);
+        }
+    }
+    
     //This function uploads the metadata to IPFS
     async function uploadMetadataToIPFS() {
         const {name, description, price} = formParams;
         //Make sure that none of the fields are empty
-        if( !name || !description || !price || !fileURL)
+        if( !name || !description || !price || !fileURL || !fileURLeBook)
             return;
 
         const nftJSON = {
-            name, description, price, image: fileURL
+            name, description, price, image: fileURL, ebookLocation: fileURLeBook
         }
 
         try {
@@ -113,7 +131,7 @@ export default function SellNFT () {
                 <br></br>
                 <div>
                     <label className="block text-[#5e60ee] text-sm font-bold mb-2" htmlFor="image">Upload e-book</label>
-                    <input type={"file"} name="text"></input>
+                    <input type={"file"} name="text" onChange={OnChangeFile_EBook}></input>
                 </div>
                 <br></br>
                 <div className="text-green text-center">{message}</div>
