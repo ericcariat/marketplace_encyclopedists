@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: Unlicensed
 pragma solidity ^0.8.0;
 
 import "./eBookFactory.sol";
@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract NFTMarketplace is ERC721URIStorage, eBookFactory {
+contract eBookMarketplace is ERC721URIStorage, eBookFactory {
 
     using Counters for Counters.Counter;
     //_tokenIds variable has the most recent minted tokenId
@@ -86,10 +86,10 @@ contract NFTMarketplace is ERC721URIStorage, eBookFactory {
         ebook_nft_instance.setPrice(price);
 
         // we have to transfert ownership to the Author 
-        // ebook_nft_instance._transfer(address(this), msg.sender, tokenId);
+        ebook_nft_instance.transferFrom(address(this), msg.sender, newTokenId);
 
         // approve the marketplace to sell NFTs on your behalf
-        // ebook_nft_instance.approve(address(this), tokenId);
+        ebook_nft_instance.approve(address(this), newTokenId);
         
         uint remainingBook = ebook_nft_instance.getRemainingMinting();
 
@@ -154,15 +154,70 @@ contract NFTMarketplace is ERC721URIStorage, eBookFactory {
         return tokens;
     }
     
-    //Returns all the NFTs that the current user is owner or seller in
+    // Get all NFT from the current user (to buy / sell )
+    // @return a table of struct ListedCollection[]
     function getMyNFTs() public view returns (ListedCollection[] memory) {
-        ListedCollection[] memory items;
+        uint totalItemCount = _itemsTotal.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
+        uint currentId;
+
+        // get number of user NFTs to make an array  
+        for(uint i=0; i < totalItemCount; i++)
+        {
+            if(idToListedCollection[i+1].owner == msg.sender || idToListedCollection[i+1].seller == msg.sender){
+                itemCount += 1;
+            }
+        }
+
+        // create an array to store all NFTs
+        ListedCollection[] memory items = new ListedCollection[](itemCount);
+        for(uint i=0; i < totalItemCount; i++) {
+            if(idToListedCollection[i+1].owner == msg.sender || idToListedCollection[i+1].seller == msg.sender) {
+                currentId = i+1;
+                ListedCollection storage currentItem = idToListedCollection[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
         return items;
     }
 
-    function executeSale(uint256 tokenId) public payable {
+    function executeSale(uint256 tokenItem) public payable {
 
+        ////////
+        address collectionAddress;
+        uint itemCount;
+    
+        // retriev contract address 
+        address contractNFT = idToListedCollection[tokenItem].contract_eBookNFTAddress;
+        uint price = idToListedCollection[tokenItem].price;
+        address seller = idToListedCollection[tokenItem].seller;
+        require(msg.value == price, "Please check amount to complete the purchase");
 
+        //update the details of the token
+        idToListedCollection[tokenItem].currentlyListed = true;
+        idToListedCollection[tokenItem].seller = payable(msg.sender);
+
+        // get an instance from contract address 
+        ebook_nft_instance = eBookNFT(contractNFT);
+
+        uint tokenId = idToListedCollection[tokenItem].tokenId;
+
+        // extract the real owner of the tokenId
+        address ownerNFT=ebook_nft_instance.ownerOf(tokenId);
+
+        //Actually transfer the token to the new owner
+        ebook_nft_instance.transferFrom(ownerNFT, msg.sender, tokenId);
+
+        //approve the marketplace to sell NFTs on your behalf
+        ebook_nft_instance.approve(address(this), tokenId);
+
+        //Transfer the listing fee to the marketplace creator
+        //payable(owner).transfer(listPrice);
+
+        //Transfer the proceeds from the sale to the seller of the NFT
+        payable(seller).transfer(msg.value);
     }
 
 }
