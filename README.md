@@ -1,42 +1,43 @@
 # The ENCYCLOPEDISTS Marketplace
 
-A publishing platforme open to everyone 
+A decentralized publishing platforme open to everyone !
 
 This application use : 
 * Event and useEffect, and components 
 * display the connected metamask address, 
-* display if you are the owner ...  eleven appears = she has all the power ;-)
-* display if you are the voters ... = the bad guys, you will see the monster in the bottom of the page 
-* Display the list of all voters 
-* Display the list of proposal 
-* Enable / Display buttons, inputs following who you are
-* some internal test are also done checksum and alert on address, etc ... 
+* display if you are the owner of the eBook + display the eBook for reading  
+* display if you are a Reader = you can buy 
+* Display the list of eBook to sell (by default all) 
+* Enable / Display buttons, eBook following who you are
 
-You can also test the deployed version on vercel here : 
+Note : On the web site, only the following menu are available 
+- Marketplace : list all eBook on sale on this platforme 
+- Publish : As an Author, you can publish your first eBook here 
+- My profile : List all of your eBook + you can also read them 
 ## Getting started 
 
 First, see the video tutorial here : 
+https://www.loom.com/share/7b1bb6c02378439ab1961df58b26eefe
+
+Github :
+https://github.com/ericcariat/marketplace_encyclopedists
 
 ## Directories (some important files)
 ```
-├── truffle - contracts =>   the contracts with added comments 
-├── truffle - 
-└─── client - src 
-              ├── App.jsx    
-              └── components 
-                     ├── LogoST.jsx :  
-                     └─── Web3stuff
-                              ├── Address.jsx : 
-                              ├── Button.jsx : 
-                              ├── ButtonAddSequence.jsx : 
-                              ├── ButtonAddVoter.jsx : 
-                              ├── ButtonProposal.jsx : 
-                              └── index.jsx : 
+├── contracts => the 3 mains contracts : eBookFactory / eBookMarketplace / eBookNFT
+├── scripts   => deployment scripts  
+└───  src     -  components 
+                     ├── Marketplace.js 
+                     ├── Navbar.js 
+                     ├── NFTpage.js  
+                     ├── NFTTile.js 
+                     ├── Profile.js 
+                     └── SellNFT.js 
 ```                              
 
 ## Requirements 
 
-* ganache 
+* hardhat
 * Solidity 0.8.13
 * vercel (with Node in version 16.x )
 Please change the node version on vercel : 
@@ -45,27 +46,30 @@ https://vercel.com/changelog/node-js-version-now-customizable-in-the-project-set
 
 ## Usage Localhost : 
 
-First run ganache (with mnemonics from your test wallet)
+First run in a terminal : npx hardhat node
+
 ```
-ganache
+npx hardhat clean
+npx hardhat compile
+npx hardhat run --network localhost scripts/01_deploy.js
+npx hardhat run --network localhost scripts/02_deploy.js
+npm run start
 ```
 
 ## Deploy on testnet Goerli 
 ```
-npx hardhat run --network goerli scripts/deploy.js
+npx hardhat clean
+npx hardhat compile
+npx hardhat run --network goerli scripts/01_deploy.js
+npx hardhat run --network goerli scripts/02_deploy.js
+npm run start
 ```
 
 ## Result
 
 Here is a screnshot of the application 
 
-## Usage vercel 
+## Vercel 
 
-## contract owner address on Goerli testnet 
-```
-Owner address
+https://marketplace-encyclopedists.vercel.app/
 
-Smart contract address
-
-```
-See on etherscan : 
