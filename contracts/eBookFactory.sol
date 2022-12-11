@@ -18,7 +18,7 @@ contract eBookFactory is Ownable {
 
     // @notice Deploy the ERC-721 Collection contract of the Author caller 
     // @return collectionAddress the address of the created collection contract
-    function createNFTCollection(string memory _TitleName) internal returns (address) {
+    function factoryCreateNFTCollection(string memory _TitleName) internal returns (address) {
         address collectionAddress;
         // Import the bytecode of the contract to deploy
         bytes memory collectionBytecode = type(eBookNFT).creationCode;
