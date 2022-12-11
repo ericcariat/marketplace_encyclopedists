@@ -15,7 +15,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 31337
     },
     goerli: {
       url: process.env.REACT_APP_ALCHEMY_API_URL,
