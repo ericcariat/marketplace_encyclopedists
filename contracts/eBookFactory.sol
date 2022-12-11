@@ -4,10 +4,8 @@ pragma solidity ^0.8.0;
 import "./eBookNFT.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
  
-/** 
-  * @notice Give the ability to deploy a contract to manage our ERC-721 eBook 
-  * @dev    If the contract is already deployed for an Author, it will revert.
-  */
+// @notice Give the ability to deploy a contract to manage our ERC-721 eBook 
+// @dev    If the contract is already deployed for an Author, it will revert.
 contract eBookFactory is Ownable {
  
     // keep all coolection address for an Author
@@ -48,4 +46,9 @@ contract eBookFactory is Ownable {
     function getAuthorCollections(address addr) public view returns (address[] memory) {
         return eBookCollections[addr];
     }
+
+    function getContractVersion() public view returns (uint) {
+        return 1;
+    }
+
 }

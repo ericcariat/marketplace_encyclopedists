@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 import NFTTile from "./NFTTile";
-import MarketplaceJSON from "../Marketplace.json";
+import MarketplaceJSON from "../eBookMarketplace.json";
 import axios from "axios";
 import { useState } from "react";
 import bandeau from '../bandeau.png';

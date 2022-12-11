@@ -220,4 +220,8 @@ contract eBookMarketplace is ERC721URIStorage, eBookFactory {
         payable(seller).transfer(msg.value);
     }
 
+    function getVersion() public view returns (uint) {
+        return 1;
+    }
+
 }

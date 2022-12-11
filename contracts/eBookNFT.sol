@@ -38,7 +38,7 @@ contract eBookNFT is ERC721URIStorage, Ownable {
 
     constructor() ERC721("ENCYCLOPEDISTS_NFT","NFT") {}
 
-    // @notice Mint a new ebook 
+    // @notice Publish a new eBook
     // @dev public function 
     // @param _userAddress user address
     // @param _tokenURI metadata link 
@@ -135,6 +135,10 @@ contract eBookNFT is ERC721URIStorage, Ownable {
             return true;
         } 
         return false;
+    }
+
+    function getContractVersion() public view returns (uint) {
+        return 1;
     }
 
     //  @dev To receive ETH

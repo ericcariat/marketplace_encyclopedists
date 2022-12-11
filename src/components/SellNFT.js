@@ -1,7 +1,7 @@
 import Navbar from "./Navbar";
 import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
-import Marketplace from '../Marketplace.json';
+import Marketplace from '../eBookMarketplace.json';
 import eBookNFT from '../eBookNFT.json';
 import eBookFactory from '../eBookFactory.json';
 import { useLocation } from "react-router";
