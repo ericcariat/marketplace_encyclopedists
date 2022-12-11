@@ -9,7 +9,7 @@ async function main() {
   const balance = await deployer.getBalance();
   console.log("Account balance:", balance.toString());
 
-  const Marketplace = await hre.ethers.getContractFactory("NFTMarketplace");
+  const Marketplace = await hre.ethers.getContractFactory("eBookMarketplace");
   const marketplace = await Marketplace.deploy();
 
   await marketplace.deployed();
@@ -22,7 +22,7 @@ async function main() {
   }
 
   //This writes the ABI and address to the mktplace.json
-  fs.writeFileSync('./src/Marketplace.json', JSON.stringify(data))
+  fs.writeFileSync('./src/eBookMarketplace.json', JSON.stringify(data))
 
 }
 

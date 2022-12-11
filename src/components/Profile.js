@@ -31,8 +31,7 @@ export default function Profile () {
         */
         
         const items = await Promise.all(transaction.map(async i => {
-            const tokenURI = await contract.tokenURI(i.tokenId);
-            let meta = await axios.get(tokenURI);
+            let meta = await axios.get(i.tokenURI);
             meta = meta.data;
 
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
