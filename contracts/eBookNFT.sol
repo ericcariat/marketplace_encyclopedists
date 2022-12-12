@@ -4,10 +4,11 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract eBookNFT is ERC721URIStorage, Ownable {
+contract eBookNFT is ERC721URIStorage, Ownable, ERC2981 {
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -36,9 +37,12 @@ contract eBookNFT is ERC721URIStorage, Ownable {
     event evtNewPrice(uint newPrice);
     event evtNewSupply(uint maxSupply);
 
-    constructor() ERC721("ENCYCLOPEDISTS_NFT","NFT") {}
+    constructor() ERC721("ENCYCLOPEDISTS_NFT","NFT") {
+        // set a default royalties of 10%
+         _setDefaultRoyalty(msg.sender, 1000);
+    }
 
-    // @notice Publish a new eBook
+    // @notice Publish a new eBook & mint first book 
     // @dev public function 
     // @param _userAddress user address
     // @param _tokenURI metadata link 
@@ -50,19 +54,19 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         require(ebookNFTTable.length < (maxSupply - 1), "All NFT has been sold");
         require(msg.value >= price, "Please send more money");
 
-        // we start at 1
+        // increment tokenId
         _tokenIds.increment(); 
 
         uint newTokenID = _tokenIds.current();
-
-        // store in array - keep if it is a promotor (for royalties later)
-        // ebookNFTTable.push(Characteristics(_isPromotor));
 
         // let's mint it 
         _mint(msg.sender, newTokenID);
 
         // set link to metadata
         _setTokenURI(newTokenID, _tokenURI);
+
+        // set royalties (set default to 10%)
+        _setTokenRoyalty(newTokenID, msg.sender, 1000);
 
         // update our mapping 
         ownedTokens[msg.sender] +=1;
@@ -73,6 +77,40 @@ contract eBookNFT is ERC721URIStorage, Ownable {
 
         return newTokenID;
     }
+
+    // @notice Mint a next eBook (until max supply is reached)
+    // @dev public function 
+    // @return newTokenID the new token ID
+    function mintNexteBook () public payable returns(uint)
+    {
+        require(ebookNFTTable.length < (maxSupply - 1), "All NFT has been sold");
+        require(msg.value >= price, "Please send more money");
+
+        // we start at 1
+        _tokenIds.increment(); 
+
+        uint newTokenID = _tokenIds.current();
+
+        // let's mint it 
+        _mint(msg.sender, newTokenID);
+
+        // set link to metadata 
+        // here we keep the same URI as the first token (the one from the Author)
+        _setTokenURI(newTokenID, tokenURI(1));
+
+        // set royalties (set default to 10%)
+        _setTokenRoyalty(newTokenID, msg.sender, 1000);
+
+        // update our mapping 
+        ownedTokens[msg.sender] +=1;
+        tokenOwner[newTokenID] = msg.sender;
+
+        // emit event 
+        emit evtMinted(newTokenID);
+
+        return newTokenID;
+    }
+
 
     // @notice set the price of an NFT
     // @dev Could only be called by the Owner
@@ -105,7 +143,7 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         emit evtNewSupply(_maxSupply);
     }
    
-    // @notice Check actual balance on this contract  
+    // @notice Retrieve balance on this contract  
     // @dev Could only be called by the Owner
     // @return the actual balance 
     function withdraw() public payable onlyOwner {
@@ -137,6 +175,24 @@ contract eBookNFT is ERC721URIStorage, Ownable {
         return false;
     }
 
-    //  @dev To receive ETH
-    // receive() external payable {}
+    // override support interface
+    // @param interfaceId the interface 
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC2981)
+    returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
+
+    // Add internal burn function 
+    // @param tokenId the token to burn 
+    function _burn(uint256 tokenId) internal virtual override {
+        super._burn(tokenId);
+        _resetTokenRoyalty(tokenId);
+    }
+
+    // Add burn function 
+    // @param tokenId the token to burn 
+    function burnNFT(uint256 tokenId) public onlyOwner {
+      _burn(tokenId);
+    }
+
 }

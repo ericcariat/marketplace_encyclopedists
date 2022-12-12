@@ -43,6 +43,9 @@ https://github.com/ericcariat/marketplace_encyclopedists
 Please change the node version on vercel : 
 https://vercel.com/changelog/node-js-version-now-customizable-in-the-project-settings
 
+For testing 
+* $ npm install --save-dev chai
+* $ npm install --save-dev @nomicfoundation/hardhat-chai-matchers
 
 ## Usage Localhost : 
 

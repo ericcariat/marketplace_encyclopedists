@@ -93,7 +93,7 @@ contract eBookMarketplace is Ownable, eBookFactory {
         // ebook_nft_instance.transferFrom(address(this), msg.sender, newTokenId);
 
         // approve the marketplace to sell NFTs on your behalf
-        // ebook_nft_instance.approve(address(this), newTokenId);
+        ebook_nft_instance.approve(address(this), newTokenId);
         
         uint remainingBook = ebook_nft_instance.getRemainingMinting();
 
@@ -125,8 +125,6 @@ contract eBookMarketplace is Ownable, eBookFactory {
             _price,
             true
         );
-
-        // _transfer(msg.sender, address(this), tokenId);
 
         // Emit the event for successful transfer. 
         emit evtPublishSuccess(
