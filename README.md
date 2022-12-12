@@ -2,6 +2,8 @@
 
 A decentralized publishing platforme open to everyone !
 
+This is my first real experience with javascript, react and solidity ... I'm proud to have made it !
+
 This application use : 
 * Event and useEffect, and components 
 * display the connected metamask address, 
@@ -71,6 +73,8 @@ npm run start
 ## Result
 
 Here is a screnshot of the application 
+<img width="1628" alt="image" src="https://user-images.githubusercontent.com/23697098/206937340-cb53aa52-65ba-410b-8602-5dcef1eba0a5.png">
+
 
 ## Vercel 
 
