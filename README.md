@@ -70,6 +70,8 @@ npm run start
 ## Result
 
 Here is a screnshot of the application 
+<img width="1628" alt="image" src="https://user-images.githubusercontent.com/23697098/206937340-cb53aa52-65ba-410b-8602-5dcef1eba0a5.png">
+
 
 ## Vercel 
 
