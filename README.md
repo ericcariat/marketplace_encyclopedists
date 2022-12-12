@@ -2,6 +2,8 @@
 
 A decentralized publishing platforme open to everyone !
 
+This is my first real experience with javascript, react and solidity ... I'm proud to have made it !
+
 This application use : 
 * Event and useEffect, and components 
 * display the connected metamask address, 
