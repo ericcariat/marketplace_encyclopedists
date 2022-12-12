@@ -4,6 +4,15 @@ A decentralized publishing platforme open to everyone !
 
 This is my first real experience with javascript, react and solidity ... I'm proud to have made it !
 
+This application can :
+- An Author can publish a new eBook collection (The first eBook is minted) (Note : max supply is fixed at 100 eBooks)
+- Metadata are uploaded to pintata / ipfs (With a picture cover + a pdf with the eBook (content))
+- Readers can mint the collection up to the Max supply
+- The Marketplace can display all eBooks for sell (By default all eBook can be sell)
+
+Note : there is a lot of space for improvement ;-) 
+The marketplace keeps a mapping and counter with all items, this should be replaced by listening to event ("evtMinted"), etc ...
+
 This application use : 
 * Event and useEffect, and components 
 * display the connected metamask address, 
